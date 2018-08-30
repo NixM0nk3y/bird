@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 set -e
 
 [ ! $ARCH ] && echo ERROR: ARCH is not set. && exit 1
@@ -12,6 +12,7 @@ autoconf
 for i in $TARGETARCH; do
 	# where we save our output
 	dirarch=$i
+	[ "$dirarch" = "arm" ] && dirarch=arm
 	[ "$dirarch" = "x86_64" ] && dirarch=amd64
 	[ "$dirarch" = "aarch64" ] && dirarch=arm64
 	[ "$dirarch" = "ppc64el" ] && dirarch=ppc64le
@@ -34,8 +35,12 @@ for i in $TARGETARCH; do
 	# if target arch is our arch, then no --host=<triple>
 	HOSTARCH=
 	GCC=gcc
+
 	# are we cross-compiling
-	if [ "$i" != "$ARCH" ]; then
+        if [ "$i" = "arm" ]; then
+                HOSTARCH="$i-linux-gnueabihf"
+                GCC="$HOSTARCH-gcc"
+	elif [ "$i" != "$ARCH" ]; then
 		HOSTARCH="$i-linux-gnu"
 		GCC="$HOSTARCH-gcc"
 	fi

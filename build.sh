@@ -44,6 +44,9 @@ case $ARCH in
 	arm64|aarch64)
 		TARGETARCH=aarch64
 		;;
+        armv7|arm)
+                TARGETARCH=arm
+                ;;
 	ppc64le|ppc64el|powerpc64le)
 		TARGETARCH=powerpc64le
 		;;
